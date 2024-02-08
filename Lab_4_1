@@ -1,0 +1,136 @@
+using System;
+
+    public class TComplex
+    {
+        private double real; // Дійсна частина
+        private double imaginary; // Уявна частина
+
+        // Конструктор без параметрів
+        public TComplex()
+        {
+            real = 0;
+            imaginary = 0;
+        }
+
+        // Конструктор з параметрами
+        public TComplex(double real, double imaginary)
+        {
+            this.real = real;
+            this.imaginary = imaginary;
+        }
+
+        // Конструктор копіювання
+        public TComplex(TComplex other)
+        {
+            real = other.real;
+            imaginary = other.imaginary;
+        }
+
+           // Метод для введення даних
+       public void Input()
+    {
+        Console.Write("Enter a real part: ");
+        real = Convert.ToDouble(Console.ReadLine());
+
+        Console.Write("Enter a imaginary part: ");
+        imaginary = Convert.ToDouble(Console.ReadLine());
+     }
+
+    // Метод для виведення даних
+    public void Display()
+        {
+            if (imaginary >= 0)
+                Console.WriteLine($"A complex number: {real} + {imaginary}i");
+            else
+                Console.WriteLine($"A complex number: {real} - {Math.Abs(imaginary)}i");
+        }
+
+        // Перевантаження оператора додавання "+"
+        public static TComplex operator +(TComplex c1, TComplex c2)
+        {
+            return new TComplex(c1.real + c2.real, c1.imaginary + c2.imaginary);
+        }
+
+        // Перевантаження оператора віднімання "-"
+        public static TComplex operator -(TComplex c1, TComplex c2)
+        {
+            return new TComplex(c1.real - c2.real, c1.imaginary - c2.imaginary);
+        }
+
+        // Перевантаження оператора множення "*"
+        public static TComplex operator *(TComplex c1, TComplex c2)
+        {
+            double real = c1.real * c2.real - c1.imaginary * c2.imaginary;
+            double imaginary = c1.real * c2.imaginary + c1.imaginary * c2.real;
+            return new TComplex(real, imaginary);
+        }
+
+        // Перевантаження оператора ділення "/"
+        public static TComplex operator /(TComplex c1, TComplex c2)
+        {
+            double denominator = c2.real * c2.real + c2.imaginary * c2.imaginary;
+            if (denominator == 0)
+            {
+                throw new DivideByZeroException("Error! You cannot divide by zero.");
+            }
+
+            double real = (c1.real * c2.real + c1.imaginary * c2.imaginary) / denominator;
+            double imaginary = (c1.imaginary * c2.real - c1.real * c2.imaginary) / denominator;
+            return new TComplex(real, imaginary);
+        }
+
+   
+    public static void Main(string[] args)
+    {
+        Console.WriteLine("Enter the first complex number:");
+        double realPart1, imaginaryPart1;
+        if (!GetValidNumber("Real part: ", out realPart1) || !GetValidNumber("Imaginary part: ", out imaginaryPart1))
+        {
+            Console.WriteLine("Invalid input. Please enter valid numeric values.");
+            return;
+        }
+
+        Console.WriteLine("\nEnter the second complex number:");
+        double realPart2, imaginaryPart2;
+        if (!GetValidNumber("Real part: ", out realPart2) || !GetValidNumber("Imaginary part: ", out imaginaryPart2))
+        {
+            Console.WriteLine("Invalid input. Please enter valid numeric values.");
+            return;
+        }
+
+        // Створення об'єктів TComplex на основі введених користувачем значень
+        TComplex complex1 = new TComplex(realPart1, imaginaryPart1);
+        TComplex complex2 = new TComplex(realPart2, imaginaryPart2);
+
+        // Операції з комплексними числами
+        TComplex sum = complex1 + complex2;
+        TComplex difference = complex1 - complex2;
+        TComplex product = complex1 * complex2;
+        TComplex quotient = complex1 / complex2;
+
+        try
+        {
+           
+            Console.WriteLine("\nOperations with complex numbers:");
+            Console.WriteLine("Sum:");
+            sum.Display();
+            Console.WriteLine("\nDifference:");
+            difference.Display();
+            Console.WriteLine("\nProduct:");
+            product.Display();
+            Console.WriteLine("\nQuotient:");
+            quotient.Display();
+        }
+        catch (DivideByZeroException e)
+        {
+            Console.WriteLine(e.Message);
+        }
+    }
+
+    private static bool GetValidNumber(string message, out double number)
+    {                                                                           // Метод для перевірки правильності введення 
+        Console.Write(message);                                                //числа користувачем
+        string input = Console.ReadLine();
+        return double.TryParse(input, out number);
+    }
+}
