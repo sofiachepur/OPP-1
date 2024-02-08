@@ -1,0 +1,181 @@
+using System;
+
+class TFraction
+{
+    private int numerator;
+    private int denominator;
+
+    public TFraction()
+    {
+        numerator = 0;
+        denominator = 1;
+    }
+
+  
+    public TFraction(int numerator, int denominator)
+    {
+        if (denominator == 0)
+        {
+            throw new ArgumentException("Denominator cannot be zero.");
+        }
+
+        this.numerator = numerator;
+        this.denominator = denominator;
+
+        Reduce(); 
+    }
+
+  
+    public TFraction(TFraction other)
+    {
+        numerator = other.numerator;
+        denominator = other.denominator;
+    }
+
+    // Метод для скорочення дробу
+    private void Reduce()
+    {
+        int gcd = GCD(Math.Abs(numerator), Math.Abs(denominator));     //gcd- функція найбільший спільний дільник 
+
+        if (gcd > 1)
+        {
+            numerator /= gcd;
+            denominator /= gcd;
+        }
+    }
+    public void OutputReduced()
+    {
+        Reduce();
+        Output();
+    }
+
+    // Метод для введення даних
+    public void Input()
+    {
+        Console.Write("Enter numerator: ");
+        numerator = int.Parse(Console.ReadLine());
+
+        Console.Write("Enter denominator: ");
+        denominator = int.Parse(Console.ReadLine());
+
+        if (denominator == 0)
+        {
+            throw new ArgumentException("Denominator cannot be zero.");
+        }
+
+        Reduce(); // Скорочення дробу після введення
+    }
+
+    // Метод для виведення даних
+    public void Output()
+    {
+        Console.WriteLine($"{numerator}/{denominator}");
+    }
+
+    // додавання
+    public static TFraction operator +(TFraction frac1, TFraction frac2)
+    {
+        TFraction result = new TFraction();
+        result.numerator = frac1.numerator * frac2.denominator + frac2.numerator * frac1.denominator;
+        result.denominator = frac1.denominator * frac2.denominator;
+        result.Reduce();
+        return result;
+    }
+
+    //  віднімання
+    public static TFraction operator -(TFraction frac1, TFraction frac2)
+    {
+        TFraction result = new TFraction();
+        result.numerator = frac1.numerator * frac2.denominator - frac2.numerator * frac1.denominator;
+        result.denominator = frac1.denominator * frac2.denominator;
+        result.Reduce();
+        return result;
+    }
+
+    //  множення
+    public static TFraction operator *(TFraction frac1, TFraction frac2)
+    {
+        TFraction result = new TFraction();
+        result.numerator = frac1.numerator * frac2.numerator;
+        result.denominator = frac1.denominator * frac2.denominator;
+        result.Reduce();
+        return result;
+    }
+
+    // ділення
+    public static TFraction operator /(TFraction frac1, TFraction frac2)
+    {
+        if (frac2.numerator == 0)
+        {
+            throw new DivideByZeroException("Cannot divide by zero.");
+        }
+
+        TFraction result = new TFraction();
+        result.numerator = frac1.numerator * frac2.denominator;
+        result.denominator = frac1.denominator * frac2.numerator;
+        result.Reduce();
+        return result;
+    }
+
+    // Метод для знаходження найбільшого спільного дільника
+    private static int GCD(int a, int b)
+    {
+        while (b != 0)
+        {
+            int temp = b;
+            b = a % b;
+            a = temp;
+        }
+        return a;
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        try
+        {
+            TFraction fraction1 = new TFraction();
+            fraction1.Input();
+
+            TFraction fraction2 = new TFraction();
+            fraction2.Input();
+
+            Console.Write("Fraction 1: ");
+            fraction1.OutputReduced();
+
+            Console.Write("Fraction 2: ");
+            fraction2.OutputReduced();
+
+            TFraction sum = fraction1 + fraction2;
+            Console.Write("Sum: ");
+            sum.Output();
+
+
+            TFraction difference = fraction1 - fraction2;
+            Console.Write("Difference: ");
+            difference.Output();
+
+            TFraction product = fraction1 * fraction2;
+            Console.Write("Product: ");
+            product.Output();
+
+            TFraction quotient = fraction1 / fraction2;
+            Console.Write("Quotient: ");
+            quotient.Output();
+        }
+        catch (ArgumentException ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+        catch (DivideByZeroException ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+        finally
+        {
+            Console.WriteLine("Finally block executed.");
+        }
+    }
+}
