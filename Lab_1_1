@@ -1,0 +1,92 @@
+using System;
+
+public class Stack
+{
+    private int[] items;
+    private int top; // Вершина стеку
+
+    public Stack()
+    {
+        items = new int[10];
+        top = -1; // Початкове значення вершини стеку, коли стек порожній
+    }
+
+    public void Push(int item)
+    {
+        if (top == items.Length - 1)
+        {
+            // Стек переповнений, можливо
+            throw new InvalidOperationException("Stek perepovnenuy");
+        }
+
+        items[++top] = item;
+    }
+
+    public int Pop()
+    {
+        if (top == -1)
+        {
+            // Стек порожній, немає елементів для видалення
+            throw new InvalidOperationException("Stek perepovnenuy");
+        }
+
+        return items[top--];
+    }
+
+    public void Print()
+    {
+        Console.WriteLine("Elements:");
+
+        for (int i = 0; i <= top; i++)
+        {
+            Console.WriteLine(items[i]);
+        }
+    }
+
+    public int GetSum()
+    {
+        int sum = 0;
+
+        for (int i = 0; i <= top; i++)
+        {
+            sum += items[i];
+        }
+
+        return sum;
+    }
+
+    public void AddElement(int newItem)
+    {
+        // Метод для додавання нового елементу в стек
+        Push(newItem);
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Stack myStack = new Stack();
+
+        myStack.Push(5);
+        myStack.Push(14);
+        myStack.Push(15);
+        myStack.Push(27);
+       
+
+        myStack.Print();
+        Console.WriteLine($"Suma: {myStack.GetSum()}");
+
+        int poppedItem = myStack.Pop();
+        Console.WriteLine($"Delete: {poppedItem}");
+
+        myStack.Print();
+        Console.WriteLine($"Suma: {myStack.GetSum()}");
+
+        // Виклик нового методу для додавання елементу
+        myStack.AddElement(18);
+
+        myStack.Print();
+        Console.WriteLine($"Suma: {myStack.GetSum()}");
+    }
+}
