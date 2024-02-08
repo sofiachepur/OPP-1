@@ -1,0 +1,56 @@
+using System;
+
+public class Відрізки
+{
+    private double x1, y1, x2, y2;
+
+    // Конструктор
+    public Відрізки(double x1, double y1, double x2, double y2)
+    {
+        this.x1 = x1;
+        this.y1 = y1;
+        this.x2 = x2;
+        this.y2 = y2;
+    }
+
+    // Деструктор 
+    ~Відрізки()
+    {
+    }
+
+    // Метод для обчислення довжини відрізка
+    public double ОбчислитиДовжину()
+    {
+        double довжина = Math.Sqrt(Math.Pow(x2 - x1, 2) + Math.Pow(y2 - y1, 2));
+        return Math.Round(довжина, 2);
+    }
+
+    // Метод для обчислення кута між відрізком та віссю ОХ
+    public double ОбчислитиКут()
+    {
+        double deltaX = x2 - x1;
+        double deltaY = y2 - y1;
+
+        // Використовуємо арктангенс для обчислення кута
+        return Math.Atan2(deltaY, deltaX) * (180 / Math.PI);
+    }
+
+    // Метод для отримання даних об'єкту
+    public void ВивестиДані()
+    {
+        Console.WriteLine($"Coordinates of the beginning of the segment: ({x1}, {y1})");      //координати початку 
+        Console.WriteLine($"Coordinates of the end of the segment: ({x2}, {y2})");        //кінець     
+    }
+
+    class Program
+    {
+        static void Main()
+        {
+            Відрізки відрізок = new Відрізки(1, 2, 3, 4);    //x1,y1,x2,y2
+
+            відрізок.ВивестиДані();
+            Console.WriteLine($"The length of the segment: {відрізок.ОбчислитиДовжину()}");       //довжина відрізка 
+            Console.WriteLine($"Angle with axis OX: {відрізок.ОбчислитиКут()} degrees");    //кут
+        }
+    }
+}
